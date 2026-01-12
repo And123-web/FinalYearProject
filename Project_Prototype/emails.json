@@ -1,0 +1,5 @@
+[
+    {"text": "Urgent: Your account is locked. Click here to verify your identity.", "label": 1},
+    {"text": "The weekly team meeting has been moved to Thursday at 10am.", "label": 0},
+    {"text": "PayPal Alert: Unauthorised login detected. Secure your account immediately.", "label": 1}
+]
