@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"> <title>PhishGuard - Dashboard</title>
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> <link rel="stylesheet" href="style2.css">
+    </head>
+    <body>
+        <div class="container">
+            <div class="header">
+                <div><h1>Threat Dashboard</h1><p>Email security analysis and threat patterns</p></div>
+                <nav class="nav-links">
+                    <a href="index.html" class="active">Dashboard</a>
+                    <a href="scanner.html">Scanner</a>
+                    <a href="history.html">History</a>
+                </nav>
+            </div>
+            <div class="stats-grid">
+                <div class="stat-card"><h3>TOTAL SCANS</h3><p id="total">0</p></div>
+                <div class="stat-card"><h3>PHISHING</h3><p id="phish" class="Phishing">0</p></div>
+                <div class="stat-card"><h3>SUSPICIOUS</h3><p id="suspicious" class="Suspicious">0</p></div>
+                <div class="stat-card"><h3>SAFE</h3><p id="safe" class="Safe">0</p></div>
+            </div>
+            <div style="background:white; padding:20px; border-radius: 12px; margin-top: 30px;">
+                <canvas id="timeline"></canvas>
+            </div>
+        </div>
+        <script>
+            async function loadData() {
+                const res = await fetch('/api/history');
+                const data = await res.json();
+                document.getElementById('total').innerText = data.length;
+                document.getElementById('phish').innerText = data.filter(d => d.analysisResult === 'Phishing').length;
+                document.getElementById('suspicious').innerText = data.filter(d => d.analysisResult === 'Suspicious').length;
+                document.getElementById('safe').innerText = data.filter(d => d.analysisResult === 'Safe').length;
+                new Chart(document.getElementById('timeline'), { type: 'line', data: { labels: ['April 19', 'April 20', 'April 21', 'April 22', 'April 23', 'April 24', 'April 25', 'April 26'], datasets: [{ label: 'Threats', data: [0, 1, 0, 2, 0, 3], borderColor: '#6f42c1', tension: 0.3 }] } });
+            }
+            window.onload = loadData;
+        </script>
+    </body>
+</html>

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"> <title>PhishGuard - Scanner</title>
+        <link rel="stylesheet" href="style2.css">
+    </head>
+    <body>
+        <div class="container">
+            <div class="header">
+                <div><h1>Phishing Scanner</h1><p>Detect threats using AI and Blockchain</p></div>
+                <nav class="nav-links">
+                    <a href="index.html">Dashboard</a>
+                    <a href="scanner.html" class="active">Scanner</a>
+                    <a href="history.html">History</a>
+                </nav>
+            </div>
+            <div class="scanner-card">
+                <div>
+                    <label>Sender Email</label><input type="text" id="sender" placeholder="support@example.com">
+                    <label style="margin-top: 15px; display:block;">Subject Line</label><input type="text" id="subject" placeholder="Urgent Message">
+                    <label style="margin-top: 15px; display:block;">Email Body</label><textarea id="body" rows="8"></textarea> <button style="margin-top: 20px; width: 100%" onclick="scan()">Analyse Email</button>
+                </div>
+                <div id="results" style="padding:20px; background:#f0f7f4; border-radius:12px; display:none;">
+                    <h3>Analysis Results</h3>
+                    <p>Verdict: <strong id="res-verdict">--</strong></p>
+                    <p>AI Confidence: <span id="res-conf">--</span>%</p>
+                    <p>Blockchain Hash: <code id="res-hash" style="font-size:10px; word-break: break-all;">--</code></p>
+                </div>
+            </div>
+        </div>
+        <script>
+            async function scan() {
+                const res = await fetch('/api/scan-email', { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({ sender: document.getElementById('sender').value, subject: document.getElementById('subject').value, body: document.getElementById('body').value }) });
+                const data = await res.json();
+                document.getElementById('results').style.display = 'block';
+                document.getElementById('res-verdict').innerText = data.finalClassification;
+                document.getElementById('res-conf').innerText = (data.mlConfidence * 100).toFixed(1);
+                document.getElementById('res-hash').innerText = data.blockchainTxId; // Fixed from res-harsh and updated to match your server.js response
+            }
+        </script>
+    </body>
+</html>
